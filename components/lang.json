@@ -1,0 +1,128 @@
+{
+    "orders": {
+        "detail": {
+            "enUS": "Order Detail",
+            "esES": "Detalles de Pedido"
+        }
+    },
+    "login": {
+        "signIn": {
+            "enUS": "Sign In",
+            "esES": "Registrarse"
+        },
+        "username": {
+            "enUS": "User Name",
+            "esES": "Usuario"
+        },
+        "password": {
+            "enUS": "Password",
+            "esES": "Contraseña"
+        },
+        "failure": {
+            "enUS": "Sign in Failure",
+            "esES": "Error de inicio de sesión"
+        },
+        "success": {
+            "enUS": "Sign in Success",
+            "esES": "Iniciar sesión correctamente"
+        }
+    },
+    "common": {
+        "search": {
+            "enUS": "Search...",
+            "esES": "Buscar..."
+        },
+        "addToCart": {
+            "enUS": "Add to Basket",
+            "esES": "Añadir al Canasta"
+        }
+    },
+    "cart": {
+        "map": {
+            "enUS": "Map",
+            "esES": "Mapa"
+        },
+        "options": {
+            "enUS": "Options: ",
+            "esES": "Opciones: "
+        },
+        "price": {
+            "enUS": "Price: ",
+            "esES": "Precio: "
+        },
+        "extras": {
+            "enUS": "Extras: ",
+            "esES": "Extras: "
+        },
+        "tax": {
+            "enUS": "Tax: ",
+            "esES": "Impuesto: "
+        },
+        "total": {
+            "enUS": "Total: ",
+            "esES": "Total: "
+        },
+        "cartTotal": {
+            "enUS": "Basket Total: ",
+            "esES": "Canasta Total: "
+        },
+        "empty": {
+            "enUS": "Your basket is empty.",
+            "esES": "Tu canasta esta vacía."
+        },
+        "name": {
+            "enUS": "Name",
+            "esES": "Nombre"
+        },
+        "whatsApp": {
+            "enUS": "WhatsApp",
+            "esES": "WhatsApp"
+        },
+        "email": {
+            "enUS": "Email",
+            "esES": "Correo Electrónico"
+        },
+        "notes": {
+            "enUS": "Notes",
+            "esES": "Notas"
+        },
+        "locationSelected": {
+            "enUS": "Location Selected: ",
+            "esES": "Lugar Seleccionado: "
+        },
+        "selectLocation": {
+            "enUS": "Select Location",
+            "esES": "Seleccionar ubicación"
+        },
+        "submit": {
+            "enUS": "Send Order",
+            "esES": "Enviar Pedido"
+        },
+        "submitted": {
+            "enUS": "Order Sent",
+            "esES": "Pedido Enviado"
+        },
+        "submissionError": {
+            "enUS": "Error Sending Order",
+            "esES": "Error al enviar el pedido"
+        }
+    },
+    "menu": {
+        "market": {
+            "enUS": "Market",
+            "esES": "Mercado"
+        },
+        "garden": {
+            "enUS": "Garden",
+            "esES": "Jardín"
+        },
+        "crafts": {
+            "enUS": "Crafts",
+            "esES": "Artesanía"
+        },
+        "services": {
+            "enUS": "Services",
+            "esES": "Servicios"
+        }
+    }
+}
