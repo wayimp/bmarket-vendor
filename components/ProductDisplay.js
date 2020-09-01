@@ -67,15 +67,6 @@ const ProductDisplay = ({ bproduct, dispatch, lang }) => {
       setSelectedVariant(sv)
     }
 
-    const cartAdd = bproduct => {
-      bproduct.selectedVariant = selectedVariant
-      dispatch({ type: 'CART_ADD', payload: bproduct })
-      const message = bproduct[`name_${langSuffix}`]
-      enqueueSnackbar(message, {
-        variant: 'success'
-      })
-    }
-
     let variants = []
     if (
       bproduct.variantsAvailable &&
@@ -161,22 +152,28 @@ const ProductDisplay = ({ bproduct, dispatch, lang }) => {
                   )
                 )
               : ''}
+              <br/>
+            <Typography>
+              {getLangString('products.price', lang) +
+                ': ' +
+                numeral(
+                  bproduct.price / 100 + flatten(variants).sum('price') / 100
+                ).format('$0.00')}
+            </Typography>
           </CardContent>
+          {/*
           <CardActions>
             <Button
               size='medium'
               color='primary'
               onClick={e => {
                 e.preventDefault
-                cartAdd(bproduct)
               }}
             >
-              {numeral(
-                bproduct.price / 100 + flatten(variants).sum('price') / 100
-              ).format('$0.00')}{' '}
-              - {getLangString('common.addToCart', lang)}
+              }
             </Button>
           </CardActions>
+          */}
         </Card>
       </Grid>
     )

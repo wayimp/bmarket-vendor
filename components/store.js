@@ -1,7 +1,12 @@
 import { createStore } from 'redux'
 import { createWrapper, HYDRATE } from 'next-redux-wrapper'
 
-const initialState = { lang: 'enUS', segment: 'market', cart: [], orderInfo: {}, token: {} }
+const initialState = {
+  lang: 'enUS',
+  segment: 'orders',
+  bvendors: [],
+  token: {}
+}
 // create your reducer
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -11,28 +16,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, lang: action.payload }
     case 'SEGMENT':
       return { ...state, segment: action.payload }
-    case 'CART_ADD':
-      return {
-        ...state,
-        cart: [action.payload].concat(state.cart ? state.cart : [])
-      }
-    case 'CART_REMOVE':
-      return {
-        ...state,
-        cart: state.cart.filter(
-          (item, index) => index !== Number(action.payload)
-        )
-      }
-    case 'CART_CLEAR':
-      return {
-        ...state,
-        cart: []
-      }
-    case 'INFO_UPDATE':
-      return {
-        ...state,
-        orderInfo: action.payload
-      }
+    case 'BVENDORS':
+      return { ...state, bvendors: action.payload }
     default:
       return state
   }

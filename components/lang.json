@@ -1,4 +1,10 @@
 {
+    "products": {
+        "price": {
+            "enUS": "Price",
+            "esES": "Precio"
+        }
+    },
     "orders": {
         "detail": {
             "enUS": "Order Detail",
@@ -108,21 +114,13 @@
         }
     },
     "menu": {
-        "market": {
-            "enUS": "Market",
-            "esES": "Mercado"
+        "orders": {
+            "enUS": "Orders",
+            "esES": "Pedidos"
         },
-        "garden": {
-            "enUS": "Garden",
-            "esES": "Jardín"
-        },
-        "crafts": {
-            "enUS": "Crafts",
-            "esES": "Artesanía"
-        },
-        "services": {
-            "enUS": "Services",
-            "esES": "Servicios"
+        "products": {
+            "enUS": "Products",
+            "esES": "Productos"
         }
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'next/router'
 import { connect } from 'react-redux'
 import AppBar from '@material-ui/core/AppBar'
 import Button from '@material-ui/core/Button'
@@ -28,6 +29,8 @@ import RedeemIcon from '@material-ui/icons/Redeem'
 import PersonIcon from '@material-ui/icons/Person'
 import LangSwitcher, { Lang, getLangString } from './Lang'
 import cookie from 'js-cookie'
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn'
+import LocalOfferIcon from '@material-ui/icons/LocalOffer'
 
 const drawerWidth = 240
 
@@ -150,10 +153,8 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
   const [open, setOpen] = React.useState(false)
   const [selectedSegment, setSelectedSegment] = React.useState(segment)
 
-  const marketIsSelected = selectedSegment === 'market' ? true : false
-  const gardenIsSelected = selectedSegment === 'garden' ? true : false
-  const craftsIsSelected = selectedSegment === 'crafts' ? true : false
-  const servicesIsSelected = selectedSegment === 'services' ? true : false
+  const ordersIsSelected = selectedSegment === 'orders' ? true : false
+  const productsIsSelected = selectedSegment === 'products' ? true : false
 
   const handleDrawerOpen = () => {
     setOpen(true)
@@ -166,6 +167,7 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
   const selectSegment = segmentName => {
     setSelectedSegment(segmentName)
     dispatch({ type: 'SEGMENT', payload: segmentName })
+    Router.push(`/${segmentName}`)
   }
 
   return (
@@ -178,7 +180,6 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
         })}
       >
         <Toolbar>
-          {/*
           <IconButton
             color='inherit'
             aria-label='open drawer'
@@ -190,8 +191,12 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
           >
             <MenuIcon />
           </IconButton>
-          */}
-          <Link href='/' className={classes.title} onClick={cookie.remove('token')}>
+
+          <Link
+            href='/'
+            className={classes.title}
+            onClick={cookie.remove('token')}
+          >
             <img
               src='/images/bmarket-logo-small.png'
               alt='Boquete Market'
@@ -216,7 +221,7 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
           <LangSwitcher />
         </Toolbar>
       </AppBar>
-      {/*
+
       <Drawer
         variant='permanent'
         className={clsx(classes.drawer, {
@@ -239,52 +244,29 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
         <List>
           <ListItem
             button
-            selected={marketIsSelected}
-            key={'market'}
+            selected={ordersIsSelected}
+            key={'orders'}
             className={classes.topButton}
-            onClick={() => selectSegment('market')}
+            onClick={() => selectSegment('orders')}
           >
             <ListItemIcon>
-              <StorefrontIcon />
+              <AssignmentTurnedInIcon />
             </ListItemIcon>
-            <ListItemText primary={getLangString('menu.market', lang)} />
+            <ListItemText primary={getLangString('menu.orders', lang)} />
           </ListItem>
           <ListItem
             button
-            selected={gardenIsSelected}
-            key={'garden'}
-            onClick={() => selectSegment('garden')}
+            selected={productsIsSelected}
+            key={'products'}
+            onClick={() => selectSegment('products')}
           >
             <ListItemIcon>
-              <LocalFloristIcon />
+              <LocalOfferIcon />
             </ListItemIcon>
-            <ListItemText primary={getLangString('menu.garden', lang)} />
-          </ListItem>
-          <ListItem
-            button
-            selected={craftsIsSelected}
-            key={'crafts'}
-            onClick={() => selectSegment('crafts')}
-          >
-            <ListItemIcon>
-              <RedeemIcon />
-            </ListItemIcon>
-            <ListItemText primary={getLangString('menu.crafts', lang)} />
-          </ListItem>
-          <ListItem
-            button
-            selected={servicesIsSelected}
-            key={'services'}
-            onClick={() => selectSegment('services')}
-          >
-            <ListItemIcon>
-              <PersonIcon />
-            </ListItemIcon>
-            <ListItemText primary={getLangString('menu.services', lang)} />
+            <ListItemText primary={getLangString('menu.products', lang)} />
           </ListItem>
         </List>
       </Drawer>
-      */}
     </div>
   )
 }

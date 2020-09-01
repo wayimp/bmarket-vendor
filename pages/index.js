@@ -73,7 +73,11 @@ const Login = ({ dispatch, lang, segment }) => {
           })
           cookie.set('token', accessToken)
           dispatch({ type: 'TOKEN', payload: accessToken })
-          Router.push('/orders')
+
+          axiosClient.get('/bvendors').then(response => {
+            dispatch({ type: 'BVENDORS', payload: response.data })
+            Router.push('/orders')
+          })
         } else {
           enqueueSnackbar(getLangString('login.failure', lang), {
             variant: 'error'

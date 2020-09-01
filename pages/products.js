@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import ProductDisplay from '../components/ProductDisplay'
 import Router from 'next/router'
 import axios from 'axios'
 import { connect } from 'react-redux'
@@ -105,25 +106,30 @@ const useStyles = makeStyles(theme => ({
     border: '1px solid #AAA',
     margin: '5px',
     padding: '8px'
+  },
+  vendorLogo: {
+    maxWidth: 250,
+    maxHeight: 250,
+    float: 'top',
+    padding: 10
   }
 }))
 
-const Page = ({ dispatch, lang, cart, google, token }) => {
+const Page = ({ dispatch, lang, token, bvendors }) => {
   const classes = useStyles()
   const theme = useTheme()
   const langSuffix = lang ? lang.substring(0, 2) : 'en'
   const [open, setOpen] = React.useState(false)
-  const [borders, setBorders] = React.useState([])
+  const [bproducts, setBproducts] = React.useState([])
   const { enqueueSnackbar } = useSnackbar()
 
   const getData = () => {
-    dispatch({ type: 'SEGMENT', payload: 'orders' })
     axiosClient({
       method: 'get',
-      url: 'http://localhost:3033/borders',
+      url: 'http://localhost:3033/bproducts',
       headers: { Authorization: `Bearer ${token}` }
     }).then(response => {
-      setBorders(Array.isArray(response.data) ? response.data : [])
+      setBproducts(Array.isArray(response.data) ? response.data : [])
     })
   }
 
@@ -138,23 +144,6 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
     }
   })
 
-  const bordersSorted = borders
-    .map(order => ({
-      ...order,
-      daySubmitted: moment(order.timeline[0].timestamp, dateFormat)
-        .locale(lang.substring(0, 2))
-        .format(dateDisplay)
-    }))
-    .sort(function (a, b) {
-      const dateA = new Date(a.timeline[0].timestamp),
-        dateB = new Date(b.timeline[0].timestamp)
-      return dateB - dateA
-    })
-
-  const days = Array.isArray(bordersSorted)
-    ? [...new Set(bordersSorted.map(order => order.daySubmitted))]
-    : []
-
   const handleOpen = () => {
     setOpen(true)
   }
@@ -165,11 +154,28 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
 
   useEffect(() => {
     if (token && token.length > 0) {
+      dispatch({ type: 'SEGMENT', payload: 'products' })
       getData()
     } else {
       Router.push('/')
     }
   }, [token])
+
+  const bproductsSorted = Array.isArray(bproducts)
+    ? bproducts.sort(function (a, b) {
+        return a.category_en > b.category_en
+      })
+    : []
+
+  const bvendorsSet =
+    bproductsSorted.length > 0
+      ? [...new Set(bproductsSorted.map(bproduct => bproduct.bvendor))]
+      : []
+
+  const bvendorsFiltered =
+    bvendors && Array.isArray(bvendors)
+      ? bvendors.filter(bvendor => bvendorsSet.includes(bvendor.slug))
+      : []
 
   return (
     <Container>
@@ -177,9 +183,9 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className={classes.root}>
-          {days.map(day => (
-            <Card key={day} className={classes.day}>
-              <h3>{day}</h3>
+          {bvendorsFiltered.map(bvendor => (
+            <Card key={bvendor._id} className={classes.day}>
+              <img className={classes.vendorLogo} src={bvendor.logo} />
               <Grid
                 container
                 spacing={2}
@@ -187,10 +193,10 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
                 justify='flex-start'
                 alignItems='flex-start'
               >
-                {bordersSorted
-                  .filter(border => border.daySubmitted === day)
-                  .map(border => (
-                    <OrderCard key={border._id} border={border} />
+                {bproductsSorted
+                  .filter(bproduct => bproduct.bvendor === bvendor.slug)
+                  .map(bproduct => (
+                    <ProductDisplay bproduct={bproduct} key={bproduct._id} />
                   ))}
               </Grid>
             </Card>
