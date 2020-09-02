@@ -1,8 +1,56 @@
 {
     "products": {
+        "active": {
+            "enUS": "Active",
+            "esES": "Activo"
+        },
         "price": {
             "enUS": "Price",
             "esES": "Precio"
+        },
+        "taxRate": {
+            "enUS": "Tax Rate",
+            "esES": "Tasa de Impuesto"
+        },
+        "slug": {
+            "enUS": "Identifier",
+            "esES": "Identificador"
+        },
+        "priceEdit": {
+            "enUS": "Price (cents)",
+            "esES": "Precio (centavos)"
+        },
+        "image": {
+            "enUS": "Image (full URI)",
+            "esES": "Imagen (URI completo)"
+        },
+        "options": {
+            "enUS": "Options (Raw JSON)",
+            "esES": "Opciones (JSON sin formato)"
+        },
+        "category": {
+            "enUS": "Category",
+            "esES": "Categoría"
+        },
+        "name": {
+            "enUS": "Name",
+            "esES": "Nombre"
+        },
+        "description": {
+            "enUS": "Description",
+            "esES": "Descripción"
+        },
+        "categoryPrompt": {
+            "enUS": "Select an existing category, or enter a new one",
+            "esES": "Seleccione una categoría existente o ingrese una nueva"
+        },
+        "updated": {
+            "enUS": "Product Updated",
+            "esES": "Producto Actualizado"
+        },
+        "notUpdated": {
+            "enUS": "Product Update Failure",
+            "esES": "Error de actualización del producto"
         }
     },
     "orders": {
@@ -37,6 +85,18 @@
         "search": {
             "enUS": "Search...",
             "esES": "Buscar..."
+        },
+        "edit": {
+            "enUS": "Edit",
+            "esES": "Editar"
+        },
+        "save": {
+            "enUS": "Save",
+            "esES": "Guardar"
+        },
+        "cancel": {
+            "enUS": "Cancel",
+            "esES": "Cancelar"
         },
         "addToCart": {
             "enUS": "Add to Basket",

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Router from 'next/router'
-import axios from 'axios'
+import axiosClient from '../src/axiosClient'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { wrapper } from '../components/store'
@@ -50,7 +50,6 @@ import {
 } from 'google-maps-react'
 import { useSnackbar } from 'notistack'
 import cookie from 'js-cookie'
-import axiosClient from '../src/axiosClient'
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -100,7 +99,7 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  day: {
+  section: {
     backgroundColor: '#EEF',
     border: '1px solid #AAA',
     margin: '5px',
@@ -120,7 +119,7 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
     dispatch({ type: 'SEGMENT', payload: 'orders' })
     axiosClient({
       method: 'get',
-      url: 'http://localhost:3033/borders',
+      url: '/borders',
       headers: { Authorization: `Bearer ${token}` }
     }).then(response => {
       setBorders(Array.isArray(response.data) ? response.data : [])
@@ -178,7 +177,7 @@ const Page = ({ dispatch, lang, cart, google, token }) => {
         <div className={classes.toolbar} />
         <div className={classes.root}>
           {days.map(day => (
-            <Card key={day} className={classes.day}>
+            <Card key={day} className={classes.section}>
               <h3>{day}</h3>
               <Grid
                 container

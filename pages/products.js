@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import ProductDisplay from '../components/ProductDisplay'
+import VendorDisplay from '../components/VendorDisplay'
 import Router from 'next/router'
-import axios from 'axios'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { wrapper } from '../components/store'
@@ -19,6 +18,9 @@ import { flatten } from 'lodash'
 import moment from 'moment'
 const dateFormat = 'YYYY-MM-DDTHH:mm:SS'
 const dateDisplay = 'dddd MMMM DD'
+import { useSnackbar } from 'notistack'
+import cookie from 'js-cookie'
+import axiosClient from '../src/axiosClient'
 import {
   Container,
   Card,
@@ -43,35 +45,26 @@ import {
   Fade,
   TextField
 } from '@material-ui/core'
-import {
-  Map as GoogleMap,
-  InfoWindow,
-  Marker,
-  GoogleApiWrapper
-} from 'google-maps-react'
-import { useSnackbar } from 'notistack'
-import cookie from 'js-cookie'
-import axiosClient from '../src/axiosClient'
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
+    // padding: theme.spacing(0, 1),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar
   },
   center: {
     textAlign: 'center'
   },
+  root: {
+    flexGrow: 1
+  },
   content: {
     textAlign: 'center',
     flexGrow: 1,
     padding: theme.spacing(7)
-  },
-  root: {
-    flexGrow: 1
   },
   center: {
     textAlign: 'center',
@@ -119,14 +112,13 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
   const classes = useStyles()
   const theme = useTheme()
   const langSuffix = lang ? lang.substring(0, 2) : 'en'
-  const [open, setOpen] = React.useState(false)
   const [bproducts, setBproducts] = React.useState([])
   const { enqueueSnackbar } = useSnackbar()
 
   const getData = () => {
     axiosClient({
       method: 'get',
-      url: 'http://localhost:3033/bproducts',
+      url: '/bproducts',
       headers: { Authorization: `Bearer ${token}` }
     }).then(response => {
       setBproducts(Array.isArray(response.data) ? response.data : [])
@@ -144,14 +136,6 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
     }
   })
 
-  const handleOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
   useEffect(() => {
     if (token && token.length > 0) {
       dispatch({ type: 'SEGMENT', payload: 'products' })
@@ -161,15 +145,9 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
     }
   }, [token])
 
-  const bproductsSorted = Array.isArray(bproducts)
-    ? bproducts.sort(function (a, b) {
-        return a.category_en > b.category_en
-      })
-    : []
-
   const bvendorsSet =
-    bproductsSorted.length > 0
-      ? [...new Set(bproductsSorted.map(bproduct => bproduct.bvendor))]
+    bproducts.length > 0
+      ? [...new Set(bproducts.map(bproduct => bproduct.bvendor))]
       : []
 
   const bvendorsFiltered =
@@ -184,22 +162,13 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
         <div className={classes.toolbar} />
         <div className={classes.root}>
           {bvendorsFiltered.map(bvendor => (
-            <Card key={bvendor._id} className={classes.day}>
-              <img className={classes.vendorLogo} src={bvendor.logo} />
-              <Grid
-                container
-                spacing={2}
-                direction='row'
-                justify='flex-start'
-                alignItems='flex-start'
-              >
-                {bproductsSorted
-                  .filter(bproduct => bproduct.bvendor === bvendor.slug)
-                  .map(bproduct => (
-                    <ProductDisplay bproduct={bproduct} key={bproduct._id} />
-                  ))}
-              </Grid>
-            </Card>
+            <VendorDisplay
+              key={bvendor._id}
+              bvendor={bvendor}
+              bproductsProp={bproducts.filter(
+                bproduct => bproduct.bvendor === bvendor.slug
+              )}
+            />
           ))}
         </div>
       </main>
