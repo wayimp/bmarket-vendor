@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axiosClient from '../src/axiosClient'
 import { connect } from 'react-redux'
 import { fade, makeStyles, useTheme } from '@material-ui/core/styles'
 import Container from '@material-ui/core/Container'
@@ -34,6 +35,15 @@ const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
   const [selectedCategories, setSelectedCategories] = useState([])
   const [bproducts, setBproducts] = useState(bproductsProp)
 
+  const getData = () => {
+    axiosClient({
+      method: 'get',
+      url: '/bproducts/' + bvendor.slug
+    }).then(response => {
+      setBproducts(Array.isArray(response.data) ? response.data : [])
+    })
+  }
+
   const categories_en =
     bproducts && Array.isArray(bproducts) && bproducts.length > 0
       ? [...new Set(bproducts.map(bproduct => bproduct.category_en))]
@@ -60,16 +70,6 @@ const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
   const categoryNames = categories.filter((category, index) =>
     selectedCategories.includes(index)
   )
-
-  const updateBproduct = bproductUpdated => {
-    if (bproductUpdated) {
-      setBproducts(
-        bproducts.map(bproduct =>
-          bproduct._id !== bproductUpdated._id ? bproduct : bproductUpdated
-        )
-      )
-    }
-  }
 
   const filtered =
     selectedCategories.length > 0
@@ -113,7 +113,7 @@ const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
                 bproduct={bproduct}
                 categories_en={categories_en}
                 categories_es={categories_es}
-                updateBproduct={updateBproduct}
+                getData={getData}
               />
             )
           })}

@@ -33,6 +33,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import EditIcon from '@material-ui/icons/Edit'
 import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
+import FileCopyIcon from '@material-ui/icons/FileCopy'
+import DeleteIcon from '@material-ui/icons/Delete'
 import { useSnackbar } from 'notistack'
 
 const useStyles = makeStyles(theme => ({
@@ -86,6 +88,7 @@ Array.prototype.sum = function (prop) {
 
 const ProductDisplay = ({
   bproduct,
+  getData,
   categories_en,
   categories_es,
   updateBproduct,
@@ -100,9 +103,7 @@ const ProductDisplay = ({
     const [expanded, setExpanded] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
     const [open, setOpen] = React.useState(false)
-    const [bproductEdit, setBproductEdit] = useState(
-      JSON.parse(JSON.stringify(bproduct))
-    )
+    const [bproductEdit, setBproductEdit] = useState({})
 
     const categories_en_options = categories_en.map(category => {
       return Object.fromEntries([
@@ -148,6 +149,19 @@ const ProductDisplay = ({
       setOpen(false)
     }
 
+    const handleEdit = () => {
+      const edit = JSON.parse(JSON.stringify(bproduct))
+      setBproductEdit(edit)
+      setOpen(true)
+    }
+
+    const handleClone = () => {
+      const edit = JSON.parse(JSON.stringify(bproduct))
+      delete edit._id
+      setBproductEdit(edit)
+      setOpen(true)
+    }
+
     const handleSubmit = async () => {
       // If it has an ID aleady, then post it, or else update it.
       await axiosClient({
@@ -161,10 +175,30 @@ const ProductDisplay = ({
             variant: 'success'
           })
           handleClose()
-          updateBproduct(bproductEdit)
+          getData()
         })
         .catch(error => {
           enqueueSnackbar(getLangString('products.notUpdated', lang) + error, {
+            variant: 'error'
+          })
+        })
+    }
+
+    const handleDelete = async () => {
+      await axiosClient({
+        method: 'DELETE',
+        url: '/bproducts/' + bproduct._id,
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(response => {
+          enqueueSnackbar(getLangString('products.deleted', lang), {
+            variant: 'success'
+          })
+          handleClose()
+          getData()
+        })
+        .catch(error => {
+          enqueueSnackbar(getLangString('products.notDeleted', lang) + error, {
             variant: 'error'
           })
         })
@@ -278,10 +312,26 @@ const ProductDisplay = ({
             <Button
               variant='contained'
               color='primary'
-              onClick={handleOpen}
+              onClick={handleEdit}
               startIcon={<EditIcon />}
             >
               {getLangString('common.edit', lang)}
+            </Button>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={handleClone}
+              startIcon={<FileCopyIcon />}
+            >
+              {getLangString('common.clone', lang)}
+            </Button>
+            <Button
+              variant='contained'
+              color='secondary'
+              onClick={handleDelete}
+              startIcon={<DeleteIcon />}
+            >
+              {getLangString('common.delete', lang)}
             </Button>
           </CardActions>
         </Card>
@@ -498,9 +548,6 @@ const ProductDisplay = ({
                       option => option.isSelected
                     )}
                   />
-                </Grid>
-                <Grid item xs={12}>
-                  <LabelDivider />
                 </Grid>
                 <Grid
                   container

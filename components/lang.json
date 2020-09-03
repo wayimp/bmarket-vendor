@@ -51,6 +51,14 @@
         "notUpdated": {
             "enUS": "Product Update Failure",
             "esES": "Error de actualización del producto"
+        },
+        "deleted": {
+            "enUS": "Product Deleted",
+            "esES": "Producto Eliminado"
+        },
+        "notDeleted": {
+            "enUS": "Product Delete Failure",
+            "esES": "Error de eliminación de producto"
         }
     },
     "orders": {
@@ -98,9 +106,13 @@
             "enUS": "Cancel",
             "esES": "Cancelar"
         },
-        "addToCart": {
-            "enUS": "Add to Basket",
-            "esES": "Añadir al Canasta"
+        "clone": {
+            "enUS": "Clone",
+            "esES": "Clonar"
+        },
+        "delete": {
+            "enUS": "Delete",
+            "esES": "Eliminar"
         }
     },
     "cart": {
