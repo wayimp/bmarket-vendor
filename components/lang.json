@@ -61,6 +61,52 @@
             "esES": "Error de eliminación de producto"
         }
     },
+    "options": {
+        "addNewGroup": {
+            "enUS": "Add New Option Group",
+            "esES": "Agregar nueva groupo de opciónes"
+        },
+        "moveUp": {
+            "enUS": "Move Up",
+            "esES": "Mover hacia arriba"
+        },
+        "moveDown": {
+            "enUS": "Move Down",
+            "esES": "Mover hacia abajo"
+        },
+        "saveChanges": {
+            "enUS": "Save Changes",
+            "esES": "Guardar cambios"
+        },
+        "placeholder": {
+            "enUS": "Placeholder Text",
+            "esES": "Texto del marcador"
+        },
+        "isMulti": {
+            "enUS": "Allow Multiple Selections",
+            "esES": "Permitir múltiples selecciones"
+        },
+        "addOptionEnglish": {
+            "enUS": "Add English Option",
+            "esES": "Agregar opción en inglés"
+        },
+        "addOptionSpanish": {
+            "enUS": "Add Spanish Option",
+            "esES": "Agregar opción en español"
+        },
+        "optionSelected": {
+            "enUS": "Selected",
+            "esES": "Seleccionado"
+        },
+        "name": {
+            "enUS": "Name",
+            "esES": "Nombre"
+        },
+        "price": {
+            "enUS": "Price",
+            "esES": "Precio"
+        }
+    },
     "orders": {
         "detail": {
             "enUS": "Order Detail",
@@ -90,6 +136,18 @@
         }
     },
     "common": {
+        "confirmDelete": {
+            "enUS": "Are you sure you want to delete this item?",
+            "esES": "¿Estás seguro de que quieres eliminar este artículo?"
+        },
+        "okay": {
+            "enUS": "OK",
+            "esES": "Okay"
+        },
+        "options": {
+            "enUS": "Options",
+            "esES": "Opciones"
+        },
         "search": {
             "enUS": "Search...",
             "esES": "Buscar..."

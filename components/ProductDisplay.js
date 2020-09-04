@@ -17,6 +17,9 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Dialog,
+  DialogActions,
+  DialogTitle,
   Button,
   IconButton,
   Typography,
@@ -26,7 +29,8 @@ import {
   FormControl,
   FormControlLabel,
   TextField,
-  Switch
+  Switch,
+  Tooltip
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -35,7 +39,9 @@ import SaveIcon from '@material-ui/icons/Save'
 import CancelIcon from '@material-ui/icons/Cancel'
 import FileCopyIcon from '@material-ui/icons/FileCopy'
 import DeleteIcon from '@material-ui/icons/Delete'
+import ListAltIcon from '@material-ui/icons/ListAlt'
 import { useSnackbar } from 'notistack'
+import ProductOptions from './ProductOptions'
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -104,6 +110,30 @@ const ProductDisplay = ({
     const { enqueueSnackbar } = useSnackbar()
     const [open, setOpen] = React.useState(false)
     const [bproductEdit, setBproductEdit] = useState({})
+    const [confirmDelete, setConfirmDelete] = React.useState(false)
+    const [openOptions, setOpenOptions] = React.useState(false)
+
+    const handleOpenOptions = () => {
+      setOpenOptions(true)
+    }
+
+    const handleCloseOptions = () => {
+      setOpenOptions(false)
+    }
+
+    const handleEditOptions = () => {
+      const edit = JSON.parse(JSON.stringify(bproduct))
+      setBproductEdit(edit)
+      setOpenOptions(true)
+    }
+
+    const handleConfirmDeleteOpen = () => {
+      setConfirmDelete(true)
+    }
+
+    const handleConfirmDeleteClose = () => {
+      setConfirmDelete(false)
+    }
 
     const categories_en_options = categories_en.map(category => {
       return Object.fromEntries([
@@ -174,7 +204,6 @@ const ProductDisplay = ({
           enqueueSnackbar(getLangString('products.updated', lang), {
             variant: 'success'
           })
-          handleClose()
           getData()
         })
         .catch(error => {
@@ -182,6 +211,8 @@ const ProductDisplay = ({
             variant: 'error'
           })
         })
+      handleClose()
+      handleCloseOptions()
     }
 
     const handleDelete = async () => {
@@ -202,6 +233,7 @@ const ProductDisplay = ({
             variant: 'error'
           })
         })
+      handleConfirmDeleteClose()
     }
 
     const handleExpandClick = () => {
@@ -309,33 +341,30 @@ const ProductDisplay = ({
             </Typography>
           </CardContent>
           <CardActions>
-            <Button
-              variant='contained'
-              color='primary'
-              onClick={handleEdit}
-              startIcon={<EditIcon />}
-            >
-              {getLangString('common.edit', lang)}
-            </Button>
-            <Button
-              variant='contained'
-              color='secondary'
-              onClick={handleClone}
-              startIcon={<FileCopyIcon />}
-            >
-              {getLangString('common.clone', lang)}
-            </Button>
-            <Button
-              variant='contained'
-              color='secondary'
-              onClick={handleDelete}
-              startIcon={<DeleteIcon />}
-            >
-              {getLangString('common.delete', lang)}
-            </Button>
+            <Tooltip title={getLangString('common.edit', lang)}>
+              <IconButton onClick={handleEdit}>
+                <EditIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.options', lang)}>
+              <IconButton onClick={handleEditOptions}>
+                <ListAltIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.clone', lang)}>
+              <IconButton onClick={handleClone}>
+                <FileCopyIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.delete', lang)}>
+              <IconButton onClick={handleConfirmDeleteOpen}>
+                <DeleteIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
           </CardActions>
         </Card>
         <Modal
+          id='edit'
           className={classes.modal}
           open={open}
           onClose={handleClose}
@@ -578,6 +607,25 @@ const ProductDisplay = ({
             </div>
           </Fade>
         </Modal>
+        <ProductOptions
+          handleOpenOptions={handleOpenOptions}
+          handleCloseOptions={handleCloseOptions}
+          openOptions={openOptions}
+          variantsAvailable={bproduct.variantsAvailable}
+        />
+        <Dialog open={confirmDelete} onClose={handleConfirmDeleteClose}>
+          <DialogTitle id='alert-dialog-title'>
+            {getLangString('common.confirmDelete', lang)}
+          </DialogTitle>
+          <DialogActions>
+            <Button onClick={handleConfirmDeleteClose} color='secondary'>
+              {getLangString('common.cancel', lang)}
+            </Button>
+            <Button onClick={handleDelete} color='primary' autoFocus>
+              {getLangString('common.okay', lang)}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </Grid>
     )
   }
