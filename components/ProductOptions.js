@@ -62,7 +62,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const ProductOptions = ({
-  handleOpenOptions,
+  handleSaveOptions,
   handleCloseOptions,
   openOptions,
   variantsAvailable,
@@ -186,22 +186,13 @@ const ProductOptions = ({
     setOptions({})
   }
 
-  const updateOptions = () => {
+  const updateOptions = async updateMe => {
     setVariants(
       variants
         .slice(0, editIndex)
-        .concat(options)
+        .concat(updateMe)
         .concat(variants.slice(editIndex + 1))
     )
-    setEditIndex(-1)
-    setOptions({})
-  }
-
-  const updateDescription = e => {
-    const updateMe = {}
-    Object.assign(updateMe, options)
-    updateMe.description = e.target.value
-    setOptions(updateMe)
   }
 
   const updateIsMulti = e => {
@@ -209,6 +200,7 @@ const ProductOptions = ({
     Object.assign(updateMe, options)
     updateMe.isMulti = e.target.checked
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updatePlaceholderEn = e => {
@@ -216,6 +208,7 @@ const ProductOptions = ({
     Object.assign(updateMe, options)
     updateMe.placeholder_en = e.target.value
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updatePlaceholderEs = e => {
@@ -223,6 +216,7 @@ const ProductOptions = ({
     Object.assign(updateMe, options)
     updateMe.placeholder_es = e.target.value
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const addOptionEn = () => {
@@ -238,6 +232,7 @@ const ProductOptions = ({
       price: 0
     })
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const addOptionEs = () => {
@@ -253,6 +248,7 @@ const ProductOptions = ({
       price: 0
     })
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updateIsSelectedEn = (index, e) => {
@@ -267,6 +263,7 @@ const ProductOptions = ({
       .concat(updatedOption)
       .concat(updateMe.options_en.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updateIsSelectedEs = (index, e) => {
@@ -281,6 +278,7 @@ const ProductOptions = ({
       .concat(updatedOption)
       .concat(updateMe.options_es.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updateLabelEn = (index, e) => {
@@ -296,6 +294,7 @@ const ProductOptions = ({
       .concat(updatedOption)
       .concat(updateMe.options_en.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updateLabelEs = (index, e) => {
@@ -311,28 +310,37 @@ const ProductOptions = ({
       .concat(updatedOption)
       .concat(updateMe.options_es.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updatePriceEn = (index, e) => {
     const updateMe = {}
     Object.assign(updateMe, options)
-    const updatedOption = { ...updateMe.options_en[index], price: e.target.value}
+    const updatedOption = {
+      ...updateMe.options_en[index],
+      price: e.target.value
+    }
     updateMe.options_en = updateMe.options_en
       .slice(0, index)
       .concat(updatedOption)
       .concat(updateMe.options_en.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const updatePriceEs = (index, e) => {
     const updateMe = {}
     Object.assign(updateMe, options)
-    const updatedOption = { ...updateMe.options_es[index], price: e.target.value}
+    const updatedOption = {
+      ...updateMe.options_es[index],
+      price: e.target.value
+    }
     updateMe.options_es = updateMe.options_es
       .slice(0, index)
       .concat(updatedOption)
       .concat(updateMe.options_es.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const moveUpOptionEn = index => {
@@ -349,6 +357,7 @@ const ProductOptions = ({
         .concat(remaining.slice(index - 1))
       updateMe.options_en = inserted
       setOptions(updateMe)
+      updateOptions(updateMe)
     }
   }
 
@@ -366,6 +375,7 @@ const ProductOptions = ({
         .concat(remaining.slice(index - 1))
       updateMe.options_es = inserted
       setOptions(updateMe)
+      updateOptions(updateMe)
     }
   }
 
@@ -383,6 +393,7 @@ const ProductOptions = ({
         .concat(remaining.slice(index + 1))
       updateMe.options_en = inserted
       setOptions(updateMe)
+      updateOptions(updateMe)
     }
   }
 
@@ -400,6 +411,7 @@ const ProductOptions = ({
         .concat(remaining.slice(index + 1))
       updateMe.options_es = inserted
       setOptions(updateMe)
+      updateOptions(updateMe)
     }
   }
 
@@ -410,6 +422,7 @@ const ProductOptions = ({
       .slice(0, index)
       .concat(updateMe.options_en.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   const removeOptionEs = index => {
@@ -419,6 +432,7 @@ const ProductOptions = ({
       .slice(0, index)
       .concat(updateMe.options_es.slice(index + 1))
     setOptions(updateMe)
+    updateOptions(updateMe)
   }
 
   return (
@@ -450,8 +464,8 @@ const ProductOptions = ({
                     variantSelect[`options_${langSuffix}`] &&
                     variantSelect[`options_${langSuffix}`].length > 0 ? (
                       <Grid
+                        key={'optionsGroup' + index}
                         container
-                        xs={12}
                         style={
                           index === editIndex ? { backgroundColor: '#EEF' } : {}
                         }
@@ -519,7 +533,7 @@ const ProductOptions = ({
                   )
                 : ''}
             </Grid>
-            <Grid container xs={7}>
+            <Grid container item xs={7}>
               {options && options.hasOwnProperty('options_en') ? (
                 <>
                   <Grid item xs={12}>
@@ -555,7 +569,10 @@ const ProductOptions = ({
                     </Tooltip>
                     {Array.isArray(options.options_en)
                       ? options.options_en.map((option, index) => (
-                          <Box style={{marginTop:10}}>
+                          <Box
+                            style={{ marginTop: 10 }}
+                            key={'options_en' + index}
+                          >
                             <Tooltip
                               title={getLangString(
                                 'options.optionSelected',
@@ -580,7 +597,7 @@ const ProductOptions = ({
                             </FormControl>
                             <FormControl>
                               <TextField
-                                style={{ maxWidth: 68}}
+                                style={{ maxWidth: 68 }}
                                 className={classes.field}
                                 variant='outlined'
                                 label={getLangString('options.price', 'enUS')}
@@ -643,7 +660,10 @@ const ProductOptions = ({
 
                     {Array.isArray(options.options_es)
                       ? options.options_es.map((option, index) => (
-                          <Box style={{marginTop:10}}>
+                          <Box
+                            style={{ marginTop: 10 }}
+                            key={'options_es' + index}
+                          >
                             <Tooltip
                               title={getLangString(
                                 'options.optionSelected',
@@ -668,7 +688,7 @@ const ProductOptions = ({
                             </FormControl>
                             <FormControl>
                               <TextField
-                                style={{ maxWidth: 68}}
+                                style={{ maxWidth: 68 }}
                                 className={classes.field}
                                 variant='outlined'
                                 label={getLangString('options.price', 'esES')}
@@ -734,7 +754,7 @@ const ProductOptions = ({
                 variant='contained'
                 color='primary'
                 style={{ margin: 20 }}
-                onClick={JSON.stringify(variants)}
+                onClick={() => handleSaveOptions(variants)}
                 startIcon={<SaveIcon />}
               >
                 {getLangString('common.save', lang)}

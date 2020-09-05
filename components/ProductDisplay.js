@@ -192,12 +192,27 @@ const ProductDisplay = ({
       setOpen(true)
     }
 
+    const handleSaveOptions = async options => {
+      const updated = {
+        ...bproductEdit,
+        variantsAvailable: options
+      }
+      setBproductEdit(updated)
+      handleSave(updated)
+      handleCloseOptions()
+    }
+
     const handleSubmit = async () => {
+      handleSave(bproductEdit)
+      handleClose()
+    }
+
+    const handleSave = async bproductSave => {
       // If it has an ID aleady, then post it, or else update it.
       await axiosClient({
-        method: bproductEdit._id ? 'patch' : 'post',
+        method: bproductSave._id ? 'patch' : 'post',
         url: '/bproducts',
-        data: bproductEdit,
+        data: bproductSave,
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(response => {
@@ -211,8 +226,6 @@ const ProductDisplay = ({
             variant: 'error'
           })
         })
-      handleClose()
-      handleCloseOptions()
     }
 
     const handleDelete = async () => {
@@ -608,7 +621,7 @@ const ProductDisplay = ({
           </Fade>
         </Modal>
         <ProductOptions
-          handleOpenOptions={handleOpenOptions}
+          handleSaveOptions={handleSaveOptions}
           handleCloseOptions={handleCloseOptions}
           openOptions={openOptions}
           variantsAvailable={bproduct.variantsAvailable}
