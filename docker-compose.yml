@@ -1,0 +1,17 @@
+version: '3.4'
+  
+networks:
+  web:
+    external:
+      name: web
+services:
+  api:
+    labels:
+      - 'traefik.backend=bmarket-vendor'
+      - 'traefik.port=3035'
+      - 'traefik.frontend.rule=Host:vendor.boquetemarket.com'
+    networks:
+      web:
+    image: wayimp/bmarket-vendor
+    ports:
+      - 3035:3035
