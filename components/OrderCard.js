@@ -88,7 +88,7 @@ const OrderCard = ({ border, lang }) => {
         action={
           <IconButton aria-label={getLangString('orders.detail', lang)}>
             <Link
-              href={`/order/${border._id}`}
+              href={`https://www.boquetemarket.com/order/${border._id}`}
               target={border._id}
             >
               <LaunchIcon />
