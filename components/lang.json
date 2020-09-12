@@ -59,6 +59,14 @@
         "notDeleted": {
             "enUS": "Product Delete Failure",
             "esES": "Error de eliminación de producto"
+        },
+        "added": {
+            "enUS": "Product Added",
+            "esES": "Producto añadido"
+        },
+        "notDeleted": {
+            "enUS": "Product Add Failure",
+            "esES": "Error de añadidir de producto"
         }
     },
     "options": {

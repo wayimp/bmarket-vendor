@@ -12,8 +12,12 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
-  Typography
+  Typography,
+  Fab
 } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
+import { useSnackbar } from 'notistack'
+import { getLangString } from './Lang'
 
 const useStyles = makeStyles(theme => ({
   vendorLogo: {
@@ -26,32 +30,42 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#EEF',
     border: '1px solid #AAA',
     marginBottom: 10
+  },
+  fab: {
+    // float: 'left',
+    margin: theme.spacing(1)
   }
 }))
 
-const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
+const VendorDisplay = ({ bvendor, lang, token }) => {
   const classes = useStyles()
   const theme = useTheme()
   const [selectedCategories, setSelectedCategories] = useState([])
-  const [bproducts, setBproducts] = useState(bproductsProp)
+  const [bproducts, setBproducts] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
 
   const getData = () => {
     axiosClient({
       method: 'get',
-      url: '/bproducts/' + bvendor.slug
+      url: '/bproducts/' + bvendor.slug,
+      headers: { Authorization: `Bearer ${token}` }
     }).then(response => {
       setBproducts(Array.isArray(response.data) ? response.data : [])
     })
   }
 
+  useEffect(() => {
+    getData()
+  }, [])
+
   const categories_en =
     bproducts && Array.isArray(bproducts) && bproducts.length > 0
-      ? [...new Set(bproducts.map(bproduct => bproduct.category_en))]
+      ? [...new Set(bproducts.map(product => product.category_en))].filter((notEmpty) => { return notEmpty })
       : []
 
   const categories_es =
     bproducts && Array.isArray(bproducts) && bproducts.length > 0
-      ? [...new Set(bproducts.map(bproduct => bproduct.category_es))]
+      ? [...new Set(bproducts.map(product => product.category_es))].filter((notEmpty) => { return notEmpty })
       : []
 
   const categories = lang === 'esES' ? categories_es : categories_en
@@ -78,6 +92,42 @@ const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
         )
       : bproducts
 
+  const addNew = async () => {
+    const bproductAdd = {
+      bvendor: bvendor.slug,
+      slug: '',
+      price: 0,
+      taxRate: 0,
+      image: '',
+      category_en: '',
+      name_en: '',
+      description_en: '',
+      category_es: '',
+      name_es: '',
+      description_es: '',
+      variantsAvailable: [],
+      active: false
+    }
+
+    await axiosClient({
+      method: 'post',
+      url: '/bproducts',
+      data: bproductAdd,
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(response => {
+        enqueueSnackbar(getLangString('products.added', lang), {
+          variant: 'success'
+        })
+        getData()
+      })
+      .catch(error => {
+        enqueueSnackbar(getLangString('products.notAdded', lang) + error, {
+          variant: 'error'
+        })
+      })
+  }
+
   return (
     <Card className={classes.section}>
       <Grid container direction='column' justify='center' alignItems='center'>
@@ -100,6 +150,9 @@ const VendorDisplay = ({ bvendor, bproductsProp, lang }) => {
         </Grid>
       </Grid>
       <div className={classes.root}>
+        <Fab color='secondary' className={classes.fab} onClick={addNew}>
+          <AddIcon />
+        </Fab>
         <Grid
           container
           direction='row'

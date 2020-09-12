@@ -70,6 +70,9 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center',
     flexGrow: 1
   },
+  margin: {
+    margin: theme.spacing(1)
+  },
   lines: {
     display: 'flex',
     justifyContent: 'flex-end',
@@ -115,45 +118,15 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
   const [bproducts, setBproducts] = React.useState([])
   const { enqueueSnackbar } = useSnackbar()
 
-  const getData = () => {
-    axiosClient({
-      method: 'get',
-      url: '/bproducts',
-      headers: { Authorization: `Bearer ${token}` }
-    }).then(response => {
-      setBproducts(Array.isArray(response.data) ? response.data : [])
-    })
-  }
-
-  const onFocus = () => {
-    getData()
-  }
-
-  useEffect(() => {
-    window.addEventListener('focus', onFocus)
-    return () => {
-      window.removeEventListener('focus', onFocus)
-    }
-  })
-
   useEffect(() => {
     if (token && token.length > 0) {
       dispatch({ type: 'SEGMENT', payload: 'products' })
-      getData()
     } else {
       Router.push('/')
     }
   }, [token])
 
-  const bvendorsSet =
-    bproducts.length > 0
-      ? [...new Set(bproducts.map(bproduct => bproduct.bvendor))]
-      : []
-
-  const bvendorsFiltered =
-    bvendors && Array.isArray(bvendors)
-      ? bvendors.filter(bvendor => bvendorsSet.includes(bvendor.slug))
-      : []
+  const bvendorsMine = bvendors.filter(bvendor => bvendor.isMine)
 
   return (
     <Container>
@@ -161,13 +134,10 @@ const Page = ({ dispatch, lang, token, bvendors }) => {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <div className={classes.root}>
-          {bvendorsFiltered.map(bvendor => (
+          {bvendorsMine.map(bvendor => (
             <VendorDisplay
               key={bvendor._id}
               bvendor={bvendor}
-              bproductsProp={bproducts.filter(
-                bproduct => bproduct.bvendor === bvendor.slug
-              )}
             />
           ))}
         </div>

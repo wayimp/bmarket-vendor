@@ -74,7 +74,11 @@ const Login = ({ dispatch, lang, segment }) => {
           cookie.set('token', accessToken)
           dispatch({ type: 'TOKEN', payload: accessToken })
 
-          axiosClient.get('/bvendors').then(response => {
+          axiosClient({
+            method: 'get',
+            url: '/bvendors',
+            headers: { Authorization: `Bearer ${accessToken}` }
+          }).then(response => {
             dispatch({ type: 'BVENDORS', payload: response.data })
             Router.push('/orders')
           })

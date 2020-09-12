@@ -229,6 +229,7 @@ const ProductDisplay = ({
     }
 
     const handleDelete = async () => {
+      setConfirmDelete(false)
       await axiosClient({
         method: 'DELETE',
         url: '/bproducts/' + bproduct._id,
@@ -246,7 +247,6 @@ const ProductDisplay = ({
             variant: 'error'
           })
         })
-      handleConfirmDeleteClose()
     }
 
     const handleExpandClick = () => {
