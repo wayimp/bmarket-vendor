@@ -182,7 +182,6 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
         <Toolbar>
           <IconButton
             color='inherit'
-            aria-label='open drawer'
             onClick={handleDrawerOpen}
             edge='start'
             className={clsx(classes.menuButton, {

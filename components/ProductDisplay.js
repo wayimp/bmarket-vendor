@@ -30,7 +30,8 @@ import {
   FormControlLabel,
   TextField,
   Switch,
-  Tooltip
+  Tooltip,
+  Checkbox
 } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
@@ -44,6 +45,13 @@ import { useSnackbar } from 'notistack'
 import ProductOptions from './ProductOptions'
 
 const useStyles = makeStyles(theme => ({
+  segmentSelect: {
+    minWidth: 200
+  },
+  smallField: {
+    maxWidth: 120,
+    padding: theme.spacing(1)
+  },
   root: {
     maxWidth: 400,
     margin: 10,
@@ -81,6 +89,25 @@ const useStyles = makeStyles(theme => ({
   thumb: {
     maxWidth: 200,
     maxHeight: 200
+  },
+  card: {
+    maxWidth: 400,
+    margin: 10,
+    overflow: 'visible',
+    height: '98%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  cardActionArea: {
+    display: 'flex',
+    flex: '1 0 auto',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    flexDirection: 'column'
+  },
+  cardActions: {
+    display: 'flex',
+    justifyContent: 'center'
   }
 }))
 
@@ -281,9 +308,23 @@ const ProductDisplay = ({
       })
     }
 
+    const segmentOptions = [
+      { value: '', label: '' },
+      { value: 'food', label: getLangString('menu.food', lang) },
+      { value: 'drink', label: getLangString('menu.drink', lang) },
+      { value: 'garden', label: getLangString('menu.garden', lang) },
+      { value: 'crafts', label: getLangString('menu.crafts', lang) },
+      { value: 'services', label: getLangString('menu.services', lang) },
+      { value: 'rentals', label: getLangString('menu.rentals', lang) }
+    ]
+
+    const handleSegmentChange = selectedOption => {
+      changeField('segment', selectedOption.value)
+    }
+
     return (
       <Grid item lg={3} md={4} sm={5} xs={12} key={bproduct._id}>
-        <Card className={classes.root}>
+        <Card className={classes.card}>
           <CardMedia
             className={classes.media}
             image={bproduct.image || ''}
@@ -353,28 +394,30 @@ const ProductDisplay = ({
                 ).format('$0.00')}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Tooltip title={getLangString('common.edit', lang)}>
-              <IconButton onClick={handleEdit}>
-                <EditIcon color='secondary' />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={getLangString('common.options', lang)}>
-              <IconButton onClick={handleEditOptions}>
-                <ListAltIcon color='secondary' />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={getLangString('common.clone', lang)}>
-              <IconButton onClick={handleClone}>
-                <FileCopyIcon color='secondary' />
-              </IconButton>
-            </Tooltip>
-            <Tooltip title={getLangString('common.delete', lang)}>
-              <IconButton onClick={handleConfirmDeleteOpen}>
-                <DeleteIcon color='secondary' />
-              </IconButton>
-            </Tooltip>
-          </CardActions>
+          <CardActionArea className={classes.cardActionArea}>
+            <CardActions className={classes.cardActions}>
+              <Tooltip title={getLangString('common.edit', lang)}>
+                <IconButton onClick={handleEdit}>
+                  <EditIcon color='secondary' />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={getLangString('common.options', lang)}>
+                <IconButton onClick={handleEditOptions}>
+                  <ListAltIcon color='secondary' />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={getLangString('common.clone', lang)}>
+                <IconButton onClick={handleClone}>
+                  <FileCopyIcon color='secondary' />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={getLangString('common.delete', lang)}>
+                <IconButton onClick={handleConfirmDeleteOpen}>
+                  <DeleteIcon color='secondary' />
+                </IconButton>
+              </Tooltip>
+            </CardActions>
+          </CardActionArea>
         </Card>
         <Modal
           id='edit'
@@ -392,6 +435,19 @@ const ProductDisplay = ({
               <Grid container spacing={2} justify='space-between'>
                 <Grid item xs={9}>
                   <Grid item xs={12}>
+                    <FormControlLabel
+                      labelPlacement='top'
+                      control={
+                        <Switch
+                          className={classes.switch}
+                          checked={bproductEdit.active}
+                          onChange={handleSwitchChange}
+                          name='active'
+                          color='primary'
+                        />
+                      }
+                      label={getLangString('products.active', lang)}
+                    />
                     <FormControl>
                       <TextField
                         className={classes.field}
@@ -422,7 +478,7 @@ const ProductDisplay = ({
                     </FormControl>
                     <FormControl>
                       <TextField
-                        className={classes.field}
+                        className={classes.smallField}
                         variant='outlined'
                         id='taxRate'
                         label={getLangString('products.taxRate', lang)}
@@ -437,15 +493,34 @@ const ProductDisplay = ({
                     <FormControlLabel
                       labelPlacement='top'
                       control={
-                        <Switch
-                          className={classes.switch}
-                          checked={bproductEdit.active}
-                          onChange={handleSwitchChange}
-                          name='active'
+                        <Checkbox
+                          checked={bproductEdit.daily}
+                          onChange={event =>
+                            changeField('daily', event.target.checked)
+                          }
+                          name='daily'
                           color='primary'
                         />
                       }
-                      label={getLangString('products.active', lang)}
+                      label={getLangString('products.daily', lang)}
+                    />
+                    <FormControlLabel
+                      labelPlacement='top'
+                      control={
+                        <Select
+                          autosize={true}
+                          className={classes.segmentSelect}
+                          defaultValue={segmentOptions.filter(
+                            option =>
+                              option.value ===
+                              (bproductEdit.segment ? bproductEdit.segment : '')
+                          )}
+                          name='segment'
+                          options={segmentOptions}
+                          onChange={handleSegmentChange}
+                        />
+                      }
+                      label={getLangString('products.segment', lang)}
                     />
                   </Grid>
                   <Grid item xs={12}>

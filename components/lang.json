@@ -4,6 +4,14 @@
             "enUS": "Active",
             "esES": "Activo"
         },
+        "segment": {
+            "enUS": "Segment",
+            "esES": "Segmento"
+        },
+        "daily": {
+            "enUS": "Daily",
+            "esES": "Cada día"
+        },
         "price": {
             "enUS": "Price",
             "esES": "Precio"
@@ -259,6 +267,30 @@
         "products": {
             "enUS": "Products",
             "esES": "Productos"
+        },
+        "food": {
+            "enUS": "Edibles",
+            "esES": "Comestibles"
+        },
+        "drink": {
+            "enUS": "Drinks",
+            "esES": "Bebidas"
+        },
+        "crafts": {
+            "enUS": "Crafts",
+            "esES": "Artesanía"
+        },
+        "garden": {
+            "enUS": "Garden",
+            "esES": "Jardín"
+        },
+        "services": {
+            "enUS": "Services",
+            "esES": "Servicios"
+        },
+        "rentals": {
+            "enUS": "Rentals",
+            "esES": "Alquileres"
         }
     }
 }
