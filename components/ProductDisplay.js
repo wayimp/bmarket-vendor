@@ -312,6 +312,7 @@ const ProductDisplay = ({
       { value: '', label: '' },
       { value: 'food', label: getLangString('menu.food', lang) },
       { value: 'drink', label: getLangString('menu.drink', lang) },
+      { value: 'home', label: getLangString('menu.home', lang) },
       { value: 'garden', label: getLangString('menu.garden', lang) },
       { value: 'crafts', label: getLangString('menu.crafts', lang) },
       { value: 'services', label: getLangString('menu.services', lang) },

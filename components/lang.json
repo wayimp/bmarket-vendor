@@ -280,6 +280,10 @@
             "enUS": "Crafts",
             "esES": "Artesanía"
         },
+        "home": {
+            "enUS": "Home",
+            "esES": "Casa"
+        },
         "garden": {
             "enUS": "Garden",
             "esES": "Jardín"
