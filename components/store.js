@@ -4,7 +4,10 @@ import { createWrapper, HYDRATE } from 'next-redux-wrapper'
 const initialState = {
   lang: 'enUS',
   segment: 'orders',
+  psegments: [],
+  psegmentsFetched: false,
   bvendors: [],
+  bvendorsFetched: false,
   token: {}
 }
 // create your reducer
@@ -17,7 +20,9 @@ const reducer = (state = initialState, action) => {
     case 'SEGMENT':
       return { ...state, segment: action.payload }
     case 'BVENDORS':
-      return { ...state, bvendors: action.payload }
+      return { ...state, bvendorsFetched: true, bvendors: action.payload }
+    case 'PSEGMENTS':
+      return { ...state, psegmentsFetched: true, psegments: action.payload }
     default:
       return state
   }

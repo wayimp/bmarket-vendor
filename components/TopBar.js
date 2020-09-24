@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import axiosClient from '../src/axiosClient'
 import Router from 'next/router'
 import { connect } from 'react-redux'
 import AppBar from '@material-ui/core/AppBar'
@@ -147,7 +148,34 @@ const useStyles = makeStyles(theme => ({
   }
 }))
 
-const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
+const fetchSegments = async () => {
+  const response = await axiosClient.get('/bsettings/productSegments')
+  const psegments = await response.data[0].value
+  return psegments
+}
+
+const fetchVendors = async () => {
+  let bvendors = []
+  const response = await axiosClient.get('/bvendors')
+  const results = await response.data
+  if (results && Array.isArray(results) && results.length > 0) {
+    bvendors = results.sort(function (a, b) {
+      const sortA = a.sortOrder ? a.sortOrder : 100,
+        sortB = b.sortOrder ? b.sortOrder : 100
+      return sortA - sortB
+    })
+  }
+  return bvendors
+}
+
+const SearchAppBar = ({
+  dispatch,
+  lang,
+  segment,
+  psegments,
+  psegmentsFetched,
+  bvendorsFetched
+}) => {
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
@@ -155,6 +183,34 @@ const SearchAppBar = ({ dispatch, lang, segment, cart }) => {
 
   const ordersIsSelected = selectedSegment === 'orders' ? true : false
   const productsIsSelected = selectedSegment === 'products' ? true : false
+
+  if (!psegmentsFetched) {
+    fetchSegments().then(psegments =>
+      dispatch({ type: 'PSEGMENTS', payload: psegments })
+    )
+  }
+
+  if (!bvendorsFetched) {
+    fetchVendors().then(bvendors =>
+      dispatch({ type: 'BVENDORS', payload: bvendors })
+    )
+  }
+
+  useEffect(() => {
+    if (psegments && Array.isArray(psegments) && psegments.length) {
+    } else {
+      fetchSegments()
+        .then(response => {
+          const results = response.data[0].value
+          if (results && Array.isArray(results) && results.length > 0) {
+            dispatch({ type: 'PSEGMENTS', payload: results })
+          }
+        })
+        .catch(error => {
+          console.warn(JSON.stringify(error, null, 2))
+        })
+    }
+  }, [])
 
   const handleDrawerOpen = () => {
     setOpen(true)

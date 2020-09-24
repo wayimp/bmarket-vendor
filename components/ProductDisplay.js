@@ -49,7 +49,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: 200
   },
   smallField: {
-    maxWidth: 120,
+    maxWidth: 140,
     padding: theme.spacing(1)
   },
   root: {
@@ -98,16 +98,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexDirection: 'column'
   },
-  cardActionArea: {
+  cardActions: {
     display: 'flex',
     flex: '1 0 auto',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    flexDirection: 'column'
-  },
-  cardActions: {
-    display: 'flex',
-    justifyContent: 'center'
+    flexDirection: 'row'
   }
 }))
 
@@ -127,7 +123,8 @@ const ProductDisplay = ({
   updateBproduct,
   dispatch,
   lang,
-  token
+  token,
+  psegments
 }) => {
   {
     const classes = useStyles()
@@ -308,16 +305,11 @@ const ProductDisplay = ({
       })
     }
 
-    const segmentOptions = [
-      { value: '', label: '' },
-      { value: 'food', label: getLangString('menu.food', lang) },
-      { value: 'drink', label: getLangString('menu.drink', lang) },
-      { value: 'home', label: getLangString('menu.home', lang) },
-      { value: 'garden', label: getLangString('menu.garden', lang) },
-      { value: 'crafts', label: getLangString('menu.crafts', lang) },
-      { value: 'services', label: getLangString('menu.services', lang) },
-      { value: 'rentals', label: getLangString('menu.rentals', lang) }
-    ]
+    const segmentOptions = [{ value: '', label: '' }].concat(
+      psegments.map(psegment => {
+        return { value: psegment.slug, label: psegment[`name_${langSuffix}`] }
+      })
+    )
 
     const handleSegmentChange = selectedOption => {
       changeField('segment', selectedOption.value)
@@ -395,30 +387,28 @@ const ProductDisplay = ({
                 ).format('$0.00')}
             </Typography>
           </CardContent>
-          <CardActionArea className={classes.cardActionArea}>
-            <CardActions className={classes.cardActions}>
-              <Tooltip title={getLangString('common.edit', lang)}>
-                <IconButton onClick={handleEdit}>
-                  <EditIcon color='secondary' />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={getLangString('common.options', lang)}>
-                <IconButton onClick={handleEditOptions}>
-                  <ListAltIcon color='secondary' />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={getLangString('common.clone', lang)}>
-                <IconButton onClick={handleClone}>
-                  <FileCopyIcon color='secondary' />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={getLangString('common.delete', lang)}>
-                <IconButton onClick={handleConfirmDeleteOpen}>
-                  <DeleteIcon color='secondary' />
-                </IconButton>
-              </Tooltip>
-            </CardActions>
-          </CardActionArea>
+          <CardActions className={classes.cardActions}>
+            <Tooltip title={getLangString('common.edit', lang)}>
+              <IconButton onClick={handleEdit}>
+                <EditIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.options', lang)}>
+              <IconButton onClick={handleEditOptions}>
+                <ListAltIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.clone', lang)}>
+              <IconButton onClick={handleClone}>
+                <FileCopyIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title={getLangString('common.delete', lang)}>
+              <IconButton onClick={handleConfirmDeleteOpen}>
+                <DeleteIcon color='secondary' />
+              </IconButton>
+            </Tooltip>
+          </CardActions>
         </Card>
         <Modal
           id='edit'
@@ -451,7 +441,7 @@ const ProductDisplay = ({
                     />
                     <FormControl>
                       <TextField
-                        className={classes.field}
+                        className={classes.smallField}
                         variant='outlined'
                         id='slug'
                         label={getLangString('products.slug', lang)}
@@ -465,7 +455,7 @@ const ProductDisplay = ({
                     </FormControl>
                     <FormControl>
                       <TextField
-                        className={classes.field}
+                        className={classes.smallField}
                         variant='outlined'
                         id='price'
                         label={getLangString('products.price', lang)}
@@ -504,6 +494,20 @@ const ProductDisplay = ({
                         />
                       }
                       label={getLangString('products.daily', lang)}
+                    />
+                    <FormControlLabel
+                      labelPlacement='top'
+                      control={
+                        <Checkbox
+                          checked={bproductEdit.hidePrice}
+                          onChange={event =>
+                            changeField('hidePrice', event.target.checked)
+                          }
+                          name='hidePrice'
+                          color='primary'
+                        />
+                      }
+                      label={getLangString('products.hidePrice', lang)}
                     />
                     <FormControlLabel
                       labelPlacement='top'

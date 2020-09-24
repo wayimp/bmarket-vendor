@@ -28,6 +28,10 @@
             "enUS": "Price (cents)",
             "esES": "Precio (centavos)"
         },
+        "hidePrice": {
+            "enUS": "Hide Price",
+            "esES": "Ocultar Precio"
+        },
         "image": {
             "enUS": "Image (full URI)",
             "esES": "Imagen (URI completo)"
@@ -72,7 +76,7 @@
             "enUS": "Product Added",
             "esES": "Producto añadido"
         },
-        "notDeleted": {
+        "notAdded": {
             "enUS": "Product Add Failure",
             "esES": "Error de añadidir de producto"
         }
@@ -267,34 +271,6 @@
         "products": {
             "enUS": "Products",
             "esES": "Productos"
-        },
-        "food": {
-            "enUS": "Edibles",
-            "esES": "Comestibles"
-        },
-        "drink": {
-            "enUS": "Drinks",
-            "esES": "Bebidas"
-        },
-        "crafts": {
-            "enUS": "Crafts",
-            "esES": "Artesanía"
-        },
-        "home": {
-            "enUS": "Home",
-            "esES": "Casa"
-        },
-        "garden": {
-            "enUS": "Garden",
-            "esES": "Jardín"
-        },
-        "services": {
-            "enUS": "Services",
-            "esES": "Servicios"
-        },
-        "rentals": {
-            "enUS": "Rentals",
-            "esES": "Alquileres"
         }
     }
 }
